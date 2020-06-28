@@ -33,7 +33,7 @@ If you don't have mujoco installed, follow the intructions [here](https://github
 In order to run InvertedDoublePendulum-v2 with VIME, you can use the following command:
 
 ```bash
-python main.py --env-name InvertedDoublePendulum-v2 --algo vime-ppo --use-gae --log-interval 1 --num-steps 2048 --num-processes 1 --lr 3e-4 --entropy-coef 0 --value-loss-coef 0.5 --ppo-epoch 10 --num-mini-batch 32 --gamma 0.99 --num-env-steps 1000000 --use-linear-lr-decay --no-cuda --log-dir /tmp/vime-ppo/halfcheetah/halfcheetah-0 --seed 0 --use-proper-time-limits --eta 0.01
+python main.py --env-name InvertedDoublePendulum-v2 --algo vime-ppo --use-gae --log-interval 1 --num-steps 2048 --num-processes 1 --lr 3e-4 --entropy-coef 0 --value-loss-coef 0.5 --ppo-epoch 10 --num-mini-batch 32 --gamma 0.99 --num-env-steps 1000000 --use-linear-lr-decay --no-cuda --log-dir /tmp/doublependulum/vimeppo/vimeppo-0 --seed 0 --use-proper-time-limits --eta 0.01
 ```
    
 Instead, to run experiments with PPO, just replace `vime-ppo` with `ppo`.
