@@ -4,7 +4,7 @@ atari-py==0.2.6
 attrs==19.3.0
 backcall==0.2.0
 -e git+https://github.com/openai/baselines.git@ea25b9e8b234e6ee1bca43083f8f3cf974143998#egg=baselines
-bleach==1.5.0
+bleach==3.1.4
 cffi==1.14.0
 click==7.1.2
 cloudpickle==1.2.0
@@ -16,7 +16,7 @@ entrypoints==0.3
 enum34==1.1.10
 fasteners==0.15
 future==0.18.2
-gast==0.3.3
+gast==0.2.2
 glfw==1.11.2
 google-pasta==0.2.0
 grpcio==1.30.0
@@ -51,6 +51,7 @@ nbformat==5.0.7
 notebook==6.0.3
 numpy==1.19.0
 opencv-python==4.2.0.34
+opt-einsum==3.2.1
 pandas==1.0.5
 pandocfilters==1.4.2
 parso==0.7.0
@@ -75,9 +76,9 @@ QtPy==1.9.0
 scipy==1.5.0
 Send2Trash==1.5.0
 six==1.15.0
-tensorboard==1.14.0
-tensorflow-estimator==1.14.0
-tensorflow-gpu==1.14.0
+tensorboard==1.15.0
+tensorflow-estimator==1.15.1
+tensorflow-gpu==1.15.2
 tensorflow-tensorboard==0.4.0
 termcolor==1.1.0
 terminado==0.8.3
@@ -88,6 +89,7 @@ tornado==6.0.4
 tqdm==4.46.1
 traitlets==4.3.3
 wcwidth==0.2.5
+webencodings==0.5.1
 Werkzeug==1.0.1
 widgetsnbextension==3.5.1
 wrapt==1.12.1
