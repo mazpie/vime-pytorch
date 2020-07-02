@@ -1,9 +1,13 @@
 import numpy as np
 
+from misc.arguments import get_args
+
+args = get_args()
 
 class ReplayPool:
 
     def __init__(self, max_pool_size, observation_shape, action_dim):
+
         self._observation_shape = observation_shape
         self._action_dim = action_dim
         self._max_pool_size = max_pool_size
@@ -16,15 +20,28 @@ class ReplayPool:
         self._size = 0
 
     def add_sample(self, observation, action, reward, terminal):
-        self._observations[self._top] = observation
-        self._actions[self._top] = action
-        self._rewards[self._top] = reward
-        self._terminals[self._top] = terminal
-        self._top = (self._top + 1) % self._max_pool_size
-        if self._size >= self._max_pool_size:
-            self._bottom = (self._bottom + 1) % self._max_pool_size
+        if args.num_processes == 1:
+            self._observations[self._top] = observation
+            self._actions[self._top] = action
+            self._rewards[self._top] = reward
+            self._terminals[self._top] = terminal
+            self._top = (self._top + 1) % self._max_pool_size
+            if self._size >= self._max_pool_size:
+                self._bottom = (self._bottom + 1) % self._max_pool_size
+            else:
+                self._size = self._size + 1
         else:
-            self._size = self._size + 1
+            for i in range(args.num_processes):
+                self._observations[self._top] = observation[i]
+                self._actions[self._top] = action[i]
+                self._rewards[self._top] = reward[i]
+                self._terminals[self._top] = terminal[i]
+                self._top = (self._top + 1) % self._max_pool_size
+                if self._size >= self._max_pool_size:
+                    self._bottom = (self._bottom + 1) % self._max_pool_size
+                else:
+                    self._size = self._size + 1
+
 
     def random_batch(self, batch_size):
         assert self._size > batch_size

@@ -177,16 +177,23 @@ def main():
                     .reshape(args.num_steps* args.num_processes, -1)
                 rew = rollouts.rewards
                 # inputs = (o,a), target = o'
-                obs_nxt = np.vstack([obs[1:]])
-                _inputs = np.hstack([obs[:-1], act])
-                _targets = obs_nxt
+
+                obs_nxt = np.empty((0,obs.shape[1]))
+                _inputs = np.empty((0,obs.shape[1] + act.shape[1]))
+                for i in range(args.num_processes):
+                    start = args.num_steps * i + i
+                    end = args.num_steps * (i + 1) + i
+                    obs_nxt = np.vstack([obs_nxt,obs[start + 1:end+1]])
+                    _inputs = np.vstack([_inputs,np.hstack([obs[start:end], act[start - i:end - i]])])
+                    _targets = obs_nxt
 
                 _inputs = torch.Tensor(_inputs).to(device)
                 _targets = torch.Tensor(_targets).to(device)
+
                 # KL vector assumes same shape as reward.
                 kl = np.zeros(rew.shape)
                 for p in range(args.num_processes):
-                    for k in range(int(np.ceil(obs.shape[0] / float(kl_batch_size)))):
+                    for k in range(p * args.num_steps, int((p * args.num_steps) + np.ceil(args.num_steps / float(kl_batch_size)))):
 
                         # Save old params for every update.
                         agent.dynamics.save_old_params()
@@ -218,7 +225,8 @@ def main():
                                 float(agent.dynamics.f_kl_div_closed_form().detach()), 0, 1000)
 
                         for k in range(start, end):
-                            kl[k][p] = kl_div
+                            index = k % args.num_steps
+                            kl[index][p] = kl_div
 
                         # If using replay pool, undo updates.
                         if use_replay_pool:
