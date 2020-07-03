@@ -443,7 +443,6 @@ class BNN(nn.Module):
 
     def get_param_values(self):
         """Get the parameters to the dynamics.
-        This method is included to ensure consistency with TF policies.
         Returns:
             dict: The parameters (in the form of the state dictionary).
         """
@@ -451,7 +450,6 @@ class BNN(nn.Module):
 
     def set_param_values(self, state_dict):
         """Set the parameters to the dynamics.
-        This method is included to ensure consistency with TF policies.
         Args:
             state_dict (dict): State dictionary.
         """

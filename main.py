@@ -21,6 +21,7 @@ from models.model import Policy
 from misc.storage import RolloutStorage
 from misc.evaluation import evaluate
 from misc.replay_pool import ReplayPool
+import torch.multiprocessing as mp
 
 
 def main():
@@ -191,46 +192,23 @@ def main():
                 _targets = torch.Tensor(_targets).to(device)
 
                 # KL vector assumes same shape as reward.
-                kl = np.zeros(rew.shape)
-                for p in range(args.num_processes):
-                    for k in range(p * args.num_steps, int((p * args.num_steps) + np.ceil(args.num_steps / float(kl_batch_size)))):
+                kl = torch.zeros(rew.shape)
 
-                        # Save old params for every update.
-                        agent.dynamics.save_old_params()
-
-                        start = k * kl_batch_size
-                        end = np.minimum(
-                            (k + 1) * kl_batch_size, obs.shape[0] - 1)
-
-                        if second_order_update:
-                            # We do a line search over the best step sizes using
-                            # step_size * invH * grad
-                            #                 best_loss_value = np.inf
-                            for step_size in [0.01]:
-                                agent.dynamics.save_old_params()
-                                loss_value = agent.dynamics.train_update_fn(
-                                    _inputs[start:end], _targets[start:end], step_size)
-                                loss_value = loss_value.detach()
-                                kl_div = np.clip(loss_value, 0, 1000)
-                                # If using replay pool, undo updates.
-                                if use_replay_pool:
-                                    agent.dynamics.reset_to_old_params()
-                        else:
-                            # Update model weights based on current minibatch.
-                            for _ in range(n_itr_update):
-                                agent.dynamics.train_update_fn(
-                                    _inputs[start:end], _targets[start:end])
-                            # Calculate current minibatch KL.
-                            kl_div = np.clip(
-                                float(agent.dynamics.f_kl_div_closed_form().detach()), 0, 1000)
-
-                        for k in range(start, end):
-                            index = k % args.num_steps
-                            kl[index][p] = kl_div
-
-                        # If using replay pool, undo updates.
-                        if use_replay_pool:
-                            agent.dynamics.reset_to_old_params()
+                processes = []
+                if args.num_processes == 1:
+                    compute_intrinsic_reward(agent.dynamics, 0, _inputs, _targets, kl, args, kl_batch_size,
+                                             second_order_update, n_itr_update, use_replay_pool)
+                else:
+                    for p in range(args.num_processes):
+                        import copy
+                        dynamics = copy.deepcopy(agent.dynamics)
+                        p = mp.Process(target=compute_intrinsic_reward, args=(dynamics,p, _inputs, _targets, kl,
+                                                           args, kl_batch_size, second_order_update,
+                                                           n_itr_update, use_replay_pool))
+                        p.start()
+                        processes.append(p)
+                    for p in processes:
+                        p.join()
 
                 # Last element in KL vector needs to be replaced by second last one
                 # because the actual last observation has no next observation.
@@ -295,5 +273,46 @@ def main():
                      args.num_processes, eval_log_dir, device)
 
 
+def compute_intrinsic_reward(dynamics, p, _inputs, _targets, kl, args, kl_batch_size, second_order_update, n_itr_update, use_replay_pool):
+    for k in range(p * args.num_steps,
+                   int((p * args.num_steps) + np.ceil(args.num_steps / float(kl_batch_size)))):
+
+        # Save old params for every update.
+        dynamics.save_old_params()
+        start = k * kl_batch_size
+        end = np.minimum(
+            (k + 1) * kl_batch_size, _targets.shape[0] - 1)
+
+        if second_order_update:
+            # We do a line search over the best step sizes using
+            # step_size * invH * grad
+            #                 best_loss_value = np.inf
+            for step_size in [0.01]:
+                dynamics.save_old_params()
+                loss_value = dynamics.train_update_fn(
+                    _inputs[start:end], _targets[start:end], step_size)
+                loss_value = loss_value.detach()
+                kl_div = np.clip(loss_value, 0, 1000)
+                # If using replay pool, undo updates.
+                if use_replay_pool:
+                    dynamics.reset_to_old_params()
+        else:
+            # Update model weights based on current minibatch.
+            for _ in range(n_itr_update):
+                dynamics.train_update_fn(
+                    _inputs[start:end], _targets[start:end])
+            # Calculate current minibatch KL.
+            kl_div = np.clip(
+                float(dynamics.f_kl_div_closed_form().detach()), 0, 1000)
+
+        for k in range(start, end):
+            index = k % args.num_steps
+            kl[index][p] = kl_div
+
+        # If using replay pool, undo updates.
+        if use_replay_pool:
+            dynamics.reset_to_old_params()
+
 if __name__ == "__main__":
+    mp.set_start_method('spawn')
     main()
