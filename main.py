@@ -1,22 +1,16 @@
-import copy
-import glob
 import os
 import time
 from collections import deque
 
-import gym
 import numpy as np
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
 
 from algos.ppo import PPO
 from algos.vime_ppo import VIME_PPO
 from dynamics.bnn import BNN
 from misc import utils
 from misc.arguments import get_args
-from misc.envs import make_vec_envs
+from envs.envs_util import make_vec_envs
 from models.model import Policy
 from misc.storage import RolloutStorage
 from misc.evaluation import evaluate

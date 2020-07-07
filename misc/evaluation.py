@@ -2,7 +2,7 @@ import numpy as np
 import torch
 
 from misc import utils
-from misc.envs import make_vec_envs
+from envs.envs_util import make_vec_envs
 
 
 def evaluate(actor_critic, ob_rms, env_name, seed, num_processes, eval_log_dir,

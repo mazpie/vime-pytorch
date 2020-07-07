@@ -40,9 +40,19 @@ Instead, to run experiments with PPO, just replace `vime-ppo` with `ppo`.
 
 ## Results
 
+For standard gym environments, I used `--eta 0.01`.
+
 ![MountainCar-v0](results/imgs/mountain_car.png)
 
 ![InvertedDoublePendulum-v2](results/imgs/double_pendulum.png)
+
+For sparse gym environments, I used `--eta 0.0001`.
+
+![MountainCar-v0](results/imgs/mountain_car_continuous_sparse.png)
+
+![InvertedDoublePendulum-v2](results/imgs/half_cheetah_v3_sparse.png)
+
+[the number in parenthesis represents how many experiments have been run]
 
 #### Note:
 
@@ -52,6 +62,4 @@ However, the parameters used with the InvertedDoublePendulum-v2 example in the I
 
 ## TODO:
 
-* Refactor code
-* More experiments
 * Integrate more args into the command line

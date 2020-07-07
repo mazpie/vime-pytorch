@@ -1,10 +1,9 @@
 import glob
 import os
 
-import torch
 import torch.nn as nn
 
-from misc.envs import VecNormalize
+from envs.envs_util import VecNormalize
 
 
 # Get a render function
