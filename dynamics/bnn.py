@@ -338,7 +338,7 @@ class BNN(nn.Module):
         _log_p_D_given_w = []
         for _ in range(self.n_samples):
             # Make prediction.
-            prediction = self.pred_sym(input)
+            prediction = self(input)
             # Calculate model likelihood log(P(D|w)).
             _log_p_D_given_w.append(self._log_prob_normal(
                 target, prediction, self.likelihood_sd))
@@ -362,7 +362,7 @@ class BNN(nn.Module):
         _log_p_D_given_w = []
         for _ in range(self.n_samples):
             # Make prediction.
-            prediction = self.pred_sym(input)
+            prediction = self(input)
             # Calculate model likelihood log(P(sample|w)).
             _log_p_D_given_w.append(self._log_prob_normal(
                 target, prediction, self.likelihood_sd))
@@ -427,8 +427,8 @@ class BNN(nn.Module):
     def compute_fast_kl_div(self, step_size):
         return self.fast_kl_div(step_size)
 
-    def train_update_fn(self, input, target, step_size=None):
-        if self.second_order_update:
+    def train_update_fn(self, input, target, second_order_update, step_size=None):
+        if second_order_update:
             assert(step_size is not None)
             self.opt.zero_grad()
             loss = self.loss_last_sample(input, target)
@@ -436,7 +436,9 @@ class BNN(nn.Module):
             return self.compute_fast_kl_div(step_size)
         else:
             self.opt.zero_grad()
-            return self.loss_last_sample(input, target)
+            loss = self.loss_last_sample(input, target)
+            loss.backward()
+            self.opt.step()
 
     def f_kl_div_closed_form(self):
         return self.surprise()

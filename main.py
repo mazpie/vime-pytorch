@@ -284,7 +284,7 @@ def compute_intrinsic_reward(dynamics, p, _inputs, _targets, kl, args, kl_batch_
             for step_size in [0.01]:
                 dynamics.save_old_params()
                 loss_value = dynamics.train_update_fn(
-                    _inputs[start:end], _targets[start:end], step_size)
+                    _inputs[start:end], _targets[start:end], second_order_update, step_size)
                 loss_value = loss_value.detach()
                 kl_div = np.clip(loss_value, 0, 1000)
                 # If using replay pool, undo updates.
@@ -294,7 +294,7 @@ def compute_intrinsic_reward(dynamics, p, _inputs, _targets, kl, args, kl_batch_
             # Update model weights based on current minibatch.
             for _ in range(n_itr_update):
                 dynamics.train_update_fn(
-                    _inputs[start:end], _targets[start:end])
+                    _inputs[start:end], _targets[start:end], second_order_update)
             # Calculate current minibatch KL.
             kl_div = np.clip(
                 float(dynamics.f_kl_div_closed_form().detach()), 0, 1000)

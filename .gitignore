@@ -1,0 +1,6 @@
+trained_models
+.idea/
+/logs
+visualize_results.ipynb
+.ipynb_checkpoints
+__pycache__
