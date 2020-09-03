@@ -5,8 +5,10 @@ This repo contains the PyTorch implementation of two Reinforcement Learning algo
 * PPO (Proximal Policy Optimization) ([paper](https://arxiv.org/abs/1707.06347))
 * VIME-PPO (Variational Information Maximizing Exploration) ([paper](https://arxiv.org/abs/1605.09674))
 
-The code makes use of [openai/baselines](https://github.com/openai/baselines)
-and the implementation of PPO is taken from [ikostrikov/pytorch-a2c-ppo-acktr-gail](https://github.com/ikostrikov/pytorch-a2c-ppo-acktr-gail/).
+The code makes use of [openai/baselines](https://github.com/openai/baselines).
+The code for PPO is taken from [ikostrikov/pytorch-a2c-ppo-acktr-gail](https://github.com/ikostrikov/pytorch-a2c-ppo-acktr-gail/).
+
+The main novelty in this repository consists of the implementation of the VIME's exploration strategy with the PPO algorithm.
 
 ## Requirements
 
