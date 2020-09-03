@@ -76,9 +76,10 @@ QtPy==1.9.0
 scipy==1.5.0
 Send2Trash==1.5.0
 six==1.15.0
-tensorboard==1.15.0
-tensorflow-estimator==1.15.1
-tensorflow-gpu==1.15.2
+tensorboard==1.14.0
+tensorflow==1.14.0
+tensorflow-estimator==1.14.0
+tensorflow-gpu==1.14.0
 tensorflow-tensorboard==0.4.0
 termcolor==1.1.0
 terminado==0.8.3
@@ -94,3 +95,4 @@ Werkzeug==1.0.1
 widgetsnbextension==3.5.1
 wrapt==1.12.1
 zipp==3.1.0
+setuptools==41.0.0

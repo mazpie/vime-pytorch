@@ -6,9 +6,10 @@ This repo contains the PyTorch implementation of two Reinforcement Learning algo
 * VIME-PPO (Variational Information Maximizing Exploration) ([paper](https://arxiv.org/abs/1605.09674))
 
 The code makes use of [openai/baselines](https://github.com/openai/baselines).
-The code for PPO is taken from [ikostrikov/pytorch-a2c-ppo-acktr-gail](https://github.com/ikostrikov/pytorch-a2c-ppo-acktr-gail/).
 
-The main novelty in this repository consists of the implementation of the VIME's exploration strategy with the PPO algorithm.
+The PPO implementation is mainly taken from [ikostrikov/pytorch-a2c-ppo-acktr-gail](https://github.com/ikostrikov/pytorch-a2c-ppo-acktr-gail/).
+
+The main novelty in this repository consists of the implementation of the VIME's exploration strategy using the PPO algorithm.
 
 ## Requirements
 
@@ -19,16 +20,19 @@ The main novelty in this repository consists of the implementation of the VIME's
 In order to install requirements, follow:
 
 ```bash
-# Baselines for Atari preprocessing
-git clone https://github.com/openai/baselines.git
-cd baselines
-pip install -e .
-
-# Other requirements
 pip install -r requirements.txt
 ```
 
 If you don't have mujoco installed, follow the intructions [here](https://github.com/openai/mujoco-py).
+
+If having issues with OpenAI baselines, try:
+
+```
+# Baselines for Atari preprocessing
+git clone https://github.com/openai/baselines.git
+cd baselines
+pip install -e .
+```
 
 ## Instructions
 
@@ -44,15 +48,15 @@ Instead, to run experiments with PPO, just replace `vime-ppo` with `ppo`.
 
 For standard gym environments, I used `--eta 0.01`.
 
-![MountainCar-v0](results/imgs/mountain_car.png)
+![MountainCar](results/imgs/mountaincar.png)
 
-![InvertedDoublePendulum-v2](results/imgs/double_pendulum.png)
+![InvertedDoublePendulum](results/imgs/doublependulum.png)
 
 For sparse gym environments, I used `--eta 0.0001`.
 
-![MountainCar-v0](results/imgs/mountain_car_continuous_sparse.png)
+![MountainCar-Sparse](results/imgs/mountaincar_sparse.png)
 
-![InvertedDoublePendulum-v2](results/imgs/half_cheetah_v3_sparse.png)
+![HalfCheetah-Sparse](results/imgs/halfcheetah_sparse.png)
 
 [the number in parenthesis represents how many experiments have been run]
 

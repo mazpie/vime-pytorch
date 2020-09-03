@@ -30,8 +30,6 @@ class BNNLayer(nn.Module):
                  **kwargs):
         super(BNNLayer, self).__init__()
 
-        # self._srng = RandomStreams() TODO: check
-
         # Set vars.
         self.nonlinearity = nonlinearity
         self.num_inputs = incoming
@@ -89,7 +87,6 @@ class BNNLayer(nn.Module):
         # Here we generate random epsilon values from a normal distribution
         epsilon = torch.Tensor(self.num_inputs, self.num_units)
         torch.nn.init.normal_(epsilon, mean=0., std=1.)
-        # epsilon = torch.autograd.Variable(epsilon) # TODO: check if needed
 
         # Here we calculate weights based on shifting and rescaling according
         # to mean and variance (paper step 2)
@@ -101,7 +98,6 @@ class BNNLayer(nn.Module):
         # Here we generate random epsilon values from a normal distribution
         epsilon = torch.Tensor(self.num_units, )
         torch.nn.init.normal_(epsilon, mean=0., std=1.)
-        # epsilon = torch.autograd.Variable(epsilon) # TODO: check if needed
 
         b = self.b_mu + self.log_to_std(self.b_rho) * epsilon
         self.b = b
@@ -126,7 +122,6 @@ class BNNLayer(nn.Module):
 
         epsilon = torch.Tensor(self.num_units, )
         torch.nn.init.normal_(epsilon, mean=0., std=1.)
-        # epsilon = torch.autograd.Variable(epsilon) # TODO: check if needed
 
         activation = gamma + torch.sqrt(delta) * epsilon
 
