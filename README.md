@@ -48,15 +48,15 @@ Instead, to run experiments with PPO, just replace `vime-ppo` with `ppo`.
 
 For standard gym environments, I used `--eta 0.01`.
 
-![MountainCar](results/imgs/mountaincar.png)
+![MountainCar-v0](results/imgs/mountain_car.png)
 
-![InvertedDoublePendulum](results/imgs/doublependulum.png)
+![InvertedDoublePendulum-v2](results/imgs/double_pendulum.png)
 
 For sparse gym environments, I used `--eta 0.0001`.
 
-![MountainCar-Sparse](results/imgs/mountaincar_sparse.png)
+![MountainCar-v0-Sparse](results/imgs/mountain_car_continuous_sparse.png)
 
-![HalfCheetah-Sparse](results/imgs/halfcheetah_sparse.png)
+![HalfCheetah-v3-Sparse](results/imgs/half_cheetah_v3_sparse.png)
 
 [the number in parenthesis represents how many experiments have been run]
 
