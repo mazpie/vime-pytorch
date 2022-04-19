@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Mazzaglia"
+  given-names: "Pietro"
+  orcid: "https://orcid.org/0000-0003-3319-5986"
+title: "VIME: Variational Information Maximizing Exploration, implementation in PyTorch"
+date-released: 2020-09-03
+url: "https://github.com/mazpie/vime-pytorch"
